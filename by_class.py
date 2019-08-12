@@ -12,9 +12,10 @@ class Product:
     def __init__(self):
         self.title: str = ''
         self.url: str = ''
-        self.comment_count: int = ''
+        self.comment_count: int = -1
         self.mall: str = ''
-        self.collection_count: int = ''
+        self.collection_count: int = -1
+        self.price: int = -1
 
 
 class Spider:
@@ -31,17 +32,18 @@ class Spider:
             if html is not None and html != '':
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
-                items: List[PyQuery] = doc(".feed-block-title a").items()
-                for item in items:
+                contents: List[PyQuery] = doc(".z-feed-content > .z-highlight > a").items()
+                for content in contents:
                     product = Product()
-                    product.title = item.text()
-                    product.url = item.attr('href')
-                    product.mall = eval(item.attr('onclick')[15:-1])['商城']
+                    product.title = eval(content.attr('onclick')[15:-1])['pagetitle']
+                    product.url = content.attr('href')
+                    product.mall = eval(content.attr('onclick')[15:-1])['商城']
+                    product.price = content.text()
                     self.products.append(product)
-                items: List[PyQuery] = doc(".z-group-data").items()
-                for (index, item) in enumerate(items):
-                    if index % 2 == 1:
-                        self.products[int(index / 2)].comment_count = int(item.attr('title').replace('评论数 ', ''))
+                foots: List[PyQuery] = doc(".z-feed-foot > .z-feed-foot-l > .z-group-data span").items()
+                for (index, foot) in enumerate(foots):
+                    if isinstance(foot, PyQuery):
+                        self.products[index].comment_count = int(foot.text())
             sleep(2)
 
 
