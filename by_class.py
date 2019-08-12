@@ -1,3 +1,5 @@
+import json
+from time import sleep
 from typing import List
 
 from pyquery import PyQuery
@@ -8,30 +10,41 @@ class Product:
     def __init__(self):
         self.title: str = ''
         self.url: str = ''
-        self.comment_numbe: int = ''
+        self.comment_number: int = ''
         self.mall: str = ''
 
 
 class Spider:
 
     def __init__(self):
-        self.base_url: str = 'https://www.smzdm.com/fenlei/yidongyingpan/p'
-        self.request_params: dict = {"http.protocol.cookie-policy": "compatibility",
-                                     "http.protocol.content-charset": "utf-8"}
+        self.base_url: str = 'https://www.smzdm.com/fenlei/yidongyingpan/h1c1s0f0t0p'
         self.request_headers: dict = {
-            "Cookie": "checkeduser=true; user_text=zhangss108_1; pass_text=01234567890;unicom=AyJlq0yCecw%3D; bigtypeid=0; expert=1; enterCount=563552; isAdoptBox=1; work_frist=1"}
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"}
         self.products: List[Product] = []
 
     def get_products(self):
-        for page_index in range(30):
-            html = request('GET', self.base_url + str(page_index), params=self.request_params,
-                           headers=self.request_headers).text
+        for page_index in range(1, 30):
+            html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
-
-                doc = PyQuery(html)
-                for item in doc(".feed-block-title a").items():
+                doc: PyQuery = PyQuery(html)
+                items: List[PyQuery] = doc(".feed-block-title a").items()
+                for item in items:
                     product = Product()
-                    product.title=item.text()
+                    product.title = item.text()
                     product.url = item.attr('href')
-                    product.mall = item.
+                    product.mall = eval(item.attr('onclick')[15:-1])['商城']
+                    self.products.append(product)
+                items: List[PyQuery] = doc(".z-group-data").items()
+                for (index, item) in enumerate(items):
+                    if index % 2 == 1:
+                        self.products[int(index / 2)].comment_number = int(item.attr('title').replace('评论数 ', ''))
+
+            sleep(1)
+
+
+if __name__ == '__main__':
+    spider = Spider()
+    spider.get_products()
+    for product_cls in spider.products:
+        print(product_cls)
