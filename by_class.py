@@ -27,7 +27,7 @@ class Spider:
         self.products: List[Product] = []
 
     def get_products(self):
-        for page_index in tqdm(range(3, 5)):
+        for page_index in tqdm(range(1, 20)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
@@ -40,21 +40,22 @@ class Spider:
                     product.mall = eval(content.attr('onclick')[15:-1])['商城']
                     product.price = content.text()
                     self.products.append(product)
-                foots: List[PyQuery] = doc(".z-feed-foot > .z-feed-foot-l > .z-group-data span").items()
+                foots: List[PyQuery] = doc(".z-group-data > span").items()
+                # foots里边是收藏数和评论数交替出现，因此交替加入数组
                 for (index, foot) in enumerate(foots):
                     if isinstance(foot, PyQuery):
-                        self.products[index].comment_count = int(foot.text())
+                        if index % 2 == 0:
+                            self.products[int(index / 2)].comment_count = int(foot.text())
+                        else:
+                            self.products[int(index / 2)].collection_count = int(foot.text())
             sleep(2)
 
 
 if __name__ == '__main__':
     spider = Spider()
     spider.get_products()
-    for product_cls in spider.products:
-        print(product_cls.__dict__)
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
-    print("-----------------------------------------------------------------------------------------------------")
     for product_cls in spider.products:
         print(product_cls.__dict__)
-    with open('by_class.list', 'wb') as f:
+    with open('yidongyingpan.list', 'wb') as f:
         pickle.dump(spider.products, f)
