@@ -1,5 +1,6 @@
 import json
 import pickle
+import re
 from time import sleep
 from typing import List
 
@@ -15,7 +16,7 @@ class Product:
         self.comment_count: int = -1
         self.mall: str = ''
         self.collection_count: int = -1
-        self.price: int = -1
+        self.price: float = -1
 
 
 class Spider:
@@ -27,7 +28,7 @@ class Spider:
         self.products: List[Product] = []
 
     def get_products(self):
-        for page_index in tqdm(range(1, 5)):
+        for page_index in tqdm(range(1, 31)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
@@ -40,7 +41,10 @@ class Spider:
                     product.title = eval(content.attr('onclick')[15:-1])['pagetitle']
                     product.url = content.attr('href')
                     product.mall = eval(content.attr('onclick')[15:-1])['商城']
-                    product.price = content.text()
+                    try:
+                        product.price = float(re.findall(r"\d+\.?\d*", content.text())[0])
+                    except IndexError:
+                        print("价格获取错误，错误内容:{}".format(product.__dict__))
                     self.products.append(product)
                 foots: List[PyQuery] = doc(".z-group-data > span").items()
                 # foots里边是收藏数和评论数交替出现，因此交替加入数组
