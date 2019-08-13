@@ -33,28 +33,24 @@ class Spider:
             if html is not None and html != '':
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
-                contents: List[PyQuery] = doc(".z-feed-content > .z-highlight > a").items()
+                contents: List[PyQuery] = doc(".feed-row-wide").items()
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
-                accumulate_index = self.products.__len__()
                 for content in contents:
                     product = Product()
-                    product.title = eval(content.attr('onclick')[15:-1])['pagetitle']
-                    product.url = content.attr('href')
-                    product.mall = eval(content.attr('onclick')[15:-1])['商城']
+                    up = content('div.z-highlight > a').items().__next__()
+                    product.title = eval(up.attr('onclick')[15:-1])['pagetitle']
+                    product.url = up.attr('href')
+                    product.mall = eval(up.attr('onclick')[15:-1])['商城']
                     try:
-                        product.price = float(re.findall(r"\d+\.?\d*", content.text())[0])
+                        product.price = float(re.findall(r"\d+\.?\d*", up.text())[0])
                     except IndexError:
                         print("价格获取错误，错误内容:{}".format(product.__dict__))
+                    product.comment_count = int(
+                        content('.icon-comment-o-thin + span').items().__next__().text())
+                    product.collection_count = int(
+                        content('.icon-star-o-thin + span').items().__next__().text())
                     self.products.append(product)
-                foots: List[PyQuery] = doc(".z-group-data > span").items()
-                # foots里边是收藏数和评论数交替出现，因此交替加入数组
-                for (index, foot) in enumerate(foots):
-                    if isinstance(foot, PyQuery):
-                        if index % 2 == 0:
-                            # index的运算多加一个括号是为了强调先加然后在除的顺序
-                            self.products[int(accumulate_index + (index / 2))].comment_count = int(foot.text())
-                        else:
-                            self.products[int(accumulate_index + (index / 2))].collection_count = int(foot.text())
+
             sleep(2)
 
 

@@ -44,9 +44,9 @@ class Spider:
                                 0])
                     except IndexError:
                         print("价格获取错误，错误内容:{}".format(product.__dict__))
-                    product.comment_count = float(
+                    product.comment_count = int(
                         content('.icon-zhikupinglun + .comment-number').items().__next__().text())
-                    product.collection_count = float(
+                    product.collection_count = int(
                         content('.icon-collect + .comment-number').items().__next__().text())
                     self.products.append(product)
 
