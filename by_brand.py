@@ -1,4 +1,3 @@
-import json
 import pickle
 import re
 from time import sleep
@@ -8,14 +7,7 @@ from pyquery import PyQuery
 from requests import request
 from tqdm import tqdm
 
-
-class Product:
-    def __init__(self):
-        self.title: str = ''
-        self.url: str = ''
-        self.comment_count: int = -1
-        self.collection_count: int = -1
-        self.price: float = -1
+from model import BrandProduct, Product
 
 
 class Spider:
@@ -35,7 +27,7 @@ class Spider:
                 contents: List[PyQuery] = doc(".right-list-detail").items()
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
                 for content in contents:
-                    product = Product()
+                    product = BrandProduct()
                     product.title = content('.right-list-title > a').items().__next__().text()
                     product.url = content('.right-list-title > a').items().__next__().attr('href')
                     try:
