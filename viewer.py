@@ -17,7 +17,11 @@ class Viewer:
     def filter_by_price(self, price):
         self.products = list(filter(lambda x: x.price < price, self.products))
 
+    def filter_by_mall(self, mall):
+        self.products = list(filter(lambda x: x.mall == mall, self.products))
 
-v = Viewer('bijibendiannao.list')
+
+v = Viewer('bijibendiannao')
 v.filter_by_price(4500)
+v.filter_by_mall('京东')
 v.view_products()
