@@ -20,7 +20,7 @@ class Spider:
         self.products: List[Product] = []
 
     def get_products(self):
-        for page_index in tqdm(range(1, 31)):
+        for page_index in tqdm(range(12, 17)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
@@ -41,7 +41,7 @@ class Spider:
                             content('.icon-star-o-thin + span').items().__next__().text())
                         self.products.append(product)
                     except Exception as e:
-                        print("异常错误信息：".format(e))
+                        print("异常错误信息：{}".format(e))
                         print("价格获取错误，错误内容:{}".format(product.__dict__))
             sleep(2)
 
