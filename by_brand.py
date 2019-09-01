@@ -52,5 +52,5 @@ if __name__ == '__main__':
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
         print(product_cls.__dict__)
-    with open('yaseshi', 'wb') as f:
+    with open('data/yaseshi', 'wb') as f:
         pickle.dump(spider.products, f)
