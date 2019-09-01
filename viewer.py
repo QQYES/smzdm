@@ -21,7 +21,7 @@ class Viewer:
         self.products = list(filter(lambda x: x.mall == mall, self.products))
 
 
-v = Viewer('bijibendiannao')
-v.filter_by_price(4500)
-v.filter_by_mall('京东')
+v = Viewer('chuangshangjiafang')
+# v.filter_by_price(4500)
+# v.filter_by_mall('京东')
 v.view_products()
