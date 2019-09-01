@@ -28,20 +28,20 @@ class Spider:
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
                 for content in contents:
                     product = ClassProduct()
-                    up = content('div.z-highlight > a').items().__next__()
-                    product.title = eval(up.attr('onclick')[15:-1])['pagetitle']
-                    product.url = up.attr('href')
-                    product.mall = eval(up.attr('onclick')[15:-1])['商城']
                     try:
+                        up = content('div.z-highlight > a').items().__next__()
+                        product.title = eval(up.attr('onclick')[15:-1])['pagetitle']
+                        product.url = up.attr('href')
+                        product.mall = eval(up.attr('onclick')[15:-1])['商城']
                         product.price = float(re.findall(r"\d+\.?\d*", up.text())[0])
-                    except IndexError:
+                        product.comment_count = int(
+                            content('.icon-comment-o-thin + span').items().__next__().text())
+                        product.collection_count = int(
+                            content('.icon-star-o-thin + span').items().__next__().text())
+                        self.products.append(product)
+                    except Exception as e:
+                        print("异常错误信息：{}".format(e))
                         print("价格获取错误，错误内容:{}".format(product.__dict__))
-                    product.comment_count = int(
-                        content('.icon-comment-o-thin + span').items().__next__().text())
-                    product.collection_count = int(
-                        content('.icon-star-o-thin + span').items().__next__().text())
-                    self.products.append(product)
-
             sleep(2)
 
 
