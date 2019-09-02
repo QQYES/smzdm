@@ -14,7 +14,7 @@ from model import BrandProduct, Product
 class Spider:
 
     def __init__(self):
-        self.base_url: str = 'https://pinpai.smzdm.com/765/youhui/p'
+        self.base_url: str = 'https://pinpai.smzdm.com/1933/youhui/guonei/p'
         self.request_headers: dict = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"}
         self.products: List[Product] = []
@@ -52,5 +52,5 @@ if __name__ == '__main__':
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
         print(product_cls.__dict__)
-    with open('data/yaseshi', 'wb') as f:
+    with open('data/xiaomi', 'wb') as f:
         pickle.dump(spider.products, f)
