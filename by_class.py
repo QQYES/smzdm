@@ -13,13 +13,13 @@ from model import Product, ClassProduct
 class Spider:
 
     def __init__(self):
-        self.base_url: str = 'https://www.smzdm.com/fenlei/shoujiyinliaojia/h1c1s0f0t0p'
+        self.base_url: str = 'https://www.smzdm.com/fenlei/kongtiao/h1c1s0f0t0p1'
         self.request_headers: dict = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"}
         self.products: List[Product] = []
 
     def get_products(self):
-        for page_index in tqdm(range(1, 31)):
+        for page_index in tqdm(range(1, 30)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
@@ -51,5 +51,5 @@ if __name__ == '__main__':
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
         print(product_cls.__dict__)
-    with open('data/shoujiyinliaojia', 'wb') as f:
+    with open('data/xiyiji', 'wb') as f:
         pickle.dump(spider.products, f)
