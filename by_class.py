@@ -13,13 +13,13 @@ from model import Product, ClassProduct
 class Spider:
 
     def __init__(self):
-        self.base_url: str = 'https://www.smzdm.com/fenlei/xiyiji/h1c1s0f0t0p'
+        self.base_url: str = 'https://www.smzdm.com/fenlei/reshuiqi/h1c1s0f0t0p'
         self.request_headers: dict = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"}
         self.products: List[Product] = []
 
     def get_products(self):
-        for page_index in tqdm(range(1, 140)):
+        for page_index in tqdm(range(1, 60)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
