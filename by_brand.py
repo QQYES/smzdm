@@ -13,18 +13,22 @@ from model import BrandProduct, Product
 
 class Spider:
 
-    def __init__(self):
-        self.base_url: str = 'https://pinpai.smzdm.com/1933/youhui/guonei/p'
+    def __init__(self, url: str, scan_pages_number: int):
+        self.base_url: str = url
         self.request_headers: dict = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36"}
         self.products: List[Product] = []
+        self.save_file_name: str = ''
+        self.scan_pages_number: int = scan_pages_number
 
     def get_products(self):
-        for page_index in tqdm(range(1, 31)):
+        for page_index in tqdm(range(1, self.scan_pages_number)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
+                self.save_file_name = [item for item in doc(".breadcrumb a").items()][
+                                          2].text() + '_' + str(self.scan_pages_number)  # 先初始化文件名
                 contents: List[PyQuery] = doc(".right-list-detail").items()
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
                 for content in contents:
@@ -47,10 +51,10 @@ class Spider:
 
 
 if __name__ == '__main__':
-    spider = Spider()
+    spider = Spider('https://pinpai.smzdm.com/1933/youhui/guonei/p', 30)
     spider.get_products()
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
         print(product_cls.__dict__)
-    with open('data/xiaomi', 'wb') as f:
+    with open('data/' + spider.save_file_name, 'wb') as f:
         pickle.dump(spider.products, f)
