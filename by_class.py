@@ -49,7 +49,7 @@ class Spider:
 
 
 if __name__ == '__main__':
-    spider = Spider('https://www.smzdm.com/fenlei/dianfan/h1c1s0f0t0p', 60)
+    spider = Spider('https://www.smzdm.com/fenlei/xianshiqi/h1c1s0f0t0p', 167)
     spider.get_products()
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
