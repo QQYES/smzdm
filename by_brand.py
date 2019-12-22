@@ -27,8 +27,8 @@ class Spider:
             if html is not None and html != '':
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
-                self.save_file_name = [item for item in doc(".breadcrumb a").items()][
-                                          2].text() + '_' + str(self.scan_pages_number)  # 先初始化文件名
+                self.save_file_name = ([item for item in doc(".breadcrumb a").items()][
+                                          2].text() + '_' + str(self.scan_pages_number)).split('/')[-1]  # 先初始化文件名
                 contents: List[PyQuery] = doc(".right-list-detail").items()
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
                 for content in contents:
@@ -51,7 +51,7 @@ class Spider:
 
 
 if __name__ == '__main__':
-    spider = Spider('https://pinpai.smzdm.com/1933/youhui/guonei/p', 30)
+    spider = Spider('https://pinpai.smzdm.com/27177/youhui/p', 60)
     spider.get_products()
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
