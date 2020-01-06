@@ -28,21 +28,21 @@ class Spider:
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
                 self.save_file_name = ([item for item in doc(".breadcrumb a").items()][
-                                          2].text() + '_' + str(self.scan_pages_number)).split('/')[-1]  # 先初始化文件名
-                contents: List[PyQuery] = doc(".right-list-detail").items()
+                                           2].text() + '_' + str(self.scan_pages_number)).split('/')[-1]  # 先初始化文件名
+                contents: List[PyQuery] = doc(".card-youhui-li").items()
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
                 for content in contents:
                     product = BrandProduct()
                     try:
-                        product.title = content('.right-list-title > a').items().__next__().text()
-                        product.url = content('.right-list-title > a').items().__next__().attr('href')
+                        product.title = content('.card-youhui-r > .cy-title').items().__next__().text()
+                        product.url = content('.card-youhui-r > .cy-title').items().__next__().attr('href')
                         product.price = float(
-                            re.findall(r"\d+\.?\d*", content('.right-list-title > a > span').items().__next__().text())[
+                            re.findall(r"\d+\.?\d*", content('.card-youhui-r > .cy-price').items().__next__().text())[
                                 0])
                         product.comment_count = int(
-                            content('.icon-zhikupinglun + .comment-number').items().__next__().text())
+                            content('.card-youhui-r .cy-bottom-l > a').items().__next__().text())
                         product.collection_count = int(
-                            content('.icon-collect + .comment-number').items().__next__().text())
+                            [item for item in content('.card-youhui-r .cy-bottom-l > span').items()][1].text())
                         self.products.append(product)
                     except Exception as e:
                         print("异常错误信息：{}".format(e))
