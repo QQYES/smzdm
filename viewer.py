@@ -21,12 +21,12 @@ class Viewer:
         self.products = list(filter(lambda x: x.mall == mall, self.products))
 
     def filter_by_keywords(self, keywords):
-        self.products = list(filter(lambda x: not x.title.__contains__(keywords), self.products))
+        self.products = list(filter(lambda x: x.title.__contains__(keywords), self.products))
 
 
-v = Viewer('data/厚木_60')
-# v.filter_by_price(4500)
+v = Viewer('data/珍酒_18')
+v.filter_by_price(1200)
 # v.filter_by_mall('京东')
-# v.filter_by_keywords('芝华仕')
+# v.filter_by_keywords('酱香')
 # v.filter_by_keywords('真皮')
 v.view_products()
