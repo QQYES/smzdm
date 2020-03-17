@@ -1,6 +1,5 @@
 import pickle
 import re
-import sys
 from time import sleep
 from typing import List
 
@@ -22,7 +21,7 @@ class Spider:
         self.scan_pages_number: int = scan_pages_number
 
     def get_products(self):
-        for page_index in tqdm(range(1, self.scan_pages_number)):
+        for page_index in tqdm(range(1, self.scan_pages_number + 1)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery

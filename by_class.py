@@ -21,7 +21,7 @@ class Spider:
         self.scan_pages_number: int = scan_pages_number
 
     def get_products(self):
-        for page_index in tqdm(range(1, self.scan_pages_number)):
+        for page_index in tqdm(range(1, self.scan_pages_number + 1)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
             if html is not None and html != '':
                 # 初始化PyQuery
@@ -49,7 +49,7 @@ class Spider:
 
 
 if __name__ == '__main__':
-    spider = Spider('https://www.smzdm.com/fenlei/shubiaodian/h1c1s0f0t0p', 15)
+    spider = Spider('https://www.smzdm.com/fenlei/dianchi/h1c1s0f0t0p', 30)
     spider.get_products()
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
