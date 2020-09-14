@@ -28,10 +28,10 @@ class Viewer:
 
 
 v = Viewer('data/移动硬盘_50')
-v.filter_by_price(1000)
+# v.filter_by_price(1000)
 # v.filter_by_price(4600)
 # v.filter_by_mall('京东')
-v.filter_by_keywords('2TB')
+# v.filter_by_keywords('2TB')
 # v.filter_by_keywords('套装')
 # v.filter_by_keywords('无线')
 # v.filter_by_not_keywords('小新')
