@@ -33,9 +33,10 @@ class Spider:
                     product = ClassProduct()
                     try:
                         up = content('div.z-highlight > a').items().__next__()
-                        product.title = eval(up.attr('onclick')[15:-1])['pagetitle']
+                        pattern = re.compile(r'{(.*?)}')
+                        product.title = eval('{' + pattern.findall(up.attr('onclick')[34:-1])[1] + '}')['pagetitle']
                         product.url = up.attr('href')
-                        product.mall = eval(up.attr('onclick')[15:-1])['商城']
+                        product.mall = eval('{' + pattern.findall(up.attr('onclick')[34:-1])[1] + '}')['商城']
                         product.price = float(re.findall(r"\d+\.?\d*", up.text())[0])
                         product.comment_count = int(
                             content('.icon-comment-o-thin + span').items().__next__().text())
