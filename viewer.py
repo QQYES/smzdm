@@ -14,7 +14,10 @@ class Viewer:
         for product in self.products:
             print(product.__dict__)
 
-    def filter_by_price(self, price):
+    def filter_by_price_more(self, price):
+        self.products = list(filter(lambda x: x.price > price, self.products))
+
+    def filter_by_price_less(self, price):
         self.products = list(filter(lambda x: x.price < price, self.products))
 
     def filter_by_mall(self, mall):
@@ -27,14 +30,17 @@ class Viewer:
         self.products = list(filter(lambda x: not x.title.__contains__(keywords), self.products))
 
 
-v = Viewer('data/机械硬盘_25')
-# v.filter_by_price(1000)
-# v.filter_by_price(4600)
-# v.filter_by_mall('京东')
-# v.filter_by_keywords('4TB')
+v = Viewer('data/饼干糕点_165')
+# v.filter_by_price_more(100)
+# v.filter_by_price_less(5000)
+v.filter_by_mall('京东')
+# v.filter_by_keywords('全友')
 # v.filter_by_keywords('套装')
 # v.filter_by_keywords('无线')
-# v.filter_by_not_keywords('小新')
-# v.filter_by_not_keywords('移动电源')
-# v.filter_by_not_keywords('快充')
+# v.filter_by_not_keywords('面')
+# v.filter_by_not_keywords('人体')
+# v.filter_by_not_keywords('电脑')
+# v.filter_by_not_keywords('电动')
+# v.filter_by_not_keywords('芝华仕')
+# v.filter_by_not_keywords('真皮')
 v.view_products()
