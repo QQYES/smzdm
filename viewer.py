@@ -30,10 +30,10 @@ class Viewer:
         self.products = list(filter(lambda x: not x.title.__contains__(keywords), self.products))
 
 
-v = Viewer('data/饼干糕点_165')
+v = Viewer('data/跑鞋_165')
 # v.filter_by_price_more(100)
 # v.filter_by_price_less(5000)
-v.filter_by_mall('京东')
+# v.filter_by_mall('京东')
 # v.filter_by_keywords('全友')
 # v.filter_by_keywords('套装')
 # v.filter_by_keywords('无线')
