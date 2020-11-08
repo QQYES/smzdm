@@ -11,8 +11,10 @@ class Viewer:
             self.products: List[Product] = pickle.load(f)
 
     def view_products(self):
-        for product in self.products:
+        for index, product in enumerate(self.products):
             print(product.__dict__)
+            # if index >= 200:
+            #     break
 
     def filter_by_price_more(self, price):
         self.products = list(filter(lambda x: x.price > price, self.products))
@@ -30,12 +32,12 @@ class Viewer:
         self.products = list(filter(lambda x: not x.title.__contains__(keywords), self.products))
 
 
-v = Viewer('data/游戏机_44')
-# v.filter_by_price_more(4000)
+v = Viewer('data/电烤箱_50')
+# v.filter_by_price_more(100)
 # v.filter_by_price_less(1500)
-# v.filter_by_mall('芝华仕')
-v.filter_by_keywords('任天堂')
-v.filter_by_keywords('国行')
+# v.filter_by_mall('京东')
+# v.filter_by_keywords('绒')
+# v.filter_by_keywords('水星')
 # v.filter_by_keywords('无线')
 # v.filter_by_not_keywords('面')
 # v.filter_by_not_keywords('头等舱')
