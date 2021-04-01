@@ -1,0 +1,60 @@
+{
+  "id": "/marathon-lb/marathon-lb",
+  "backoffFactor": 1.15,
+  "backoffSeconds": 1,
+  "cmd": "tini -g -- /marathon-lb/run sse -m http://10.161.69.127:20657 --group external",
+  "constraints": [
+    [
+      "hostname",
+      "LIKE",
+      "10.161.12.107"
+    ],
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "forcePullImage": true,
+      "image": "harbor.unicom.local/zongbu-aicredit/marathon-lb:xk",
+      "parameters": [],
+      "privileged": true
+    },
+    "volumes": []
+  },
+  "cpus": 0.1,
+  "disk": 128,
+  "env": {
+    "TZ": "Asia/Shanghai",
+    "PORTS": "9090"
+  },
+  "executor": "",
+  "instances": 1,
+  "labels": {},
+  "maxLaunchDelaySeconds": 3600,
+  "mem": 1024,
+  "gpus": 0,
+  "networks": [
+    {
+      "mode": "host"
+    }
+  ],
+  "portDefinitions": [],
+  "requirePorts": false,
+  "upgradeStrategy": {
+    "maximumOverCapacity": 1,
+    "minimumHealthCapacity": 1
+  },
+  "version": "2021-03-31T10:14:41.878Z",
+  "versionInfo": {
+    "lastScalingAt": "2021-03-31T10:14:41.878Z",
+    "lastConfigChangeAt": "2020-10-10T03:38:30.692Z"
+  },
+  "killSelection": "YOUNGEST_FIRST",
+  "unreachableStrategy": {
+    "inactiveAfterSeconds": 0,
+    "expungeAfterSeconds": 0
+  }
+}
