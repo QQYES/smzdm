@@ -32,7 +32,7 @@ class Viewer:
         self.products = list(filter(lambda x: not x.title.__contains__(keywords), self.products))
 
 
-v = Viewer('data/安全座椅_56')
+v = Viewer('data/冰箱_165')
 # v.filter_by_price_more(8000)
 # v.filter_by_price_less(15000)
 # v.filter_by_mall('京东')
