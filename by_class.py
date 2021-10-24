@@ -23,10 +23,10 @@ class Spider:
     def get_products(self):
         for page_index in tqdm(range(1, self.scan_pages_number + 1)):
             html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
-            if html is not None and html != '':
+            if html is not None and html != '' and not html.__contains__("很抱歉，没有符合条件的结果"):
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
-                self.save_file_name = doc(".breadcrumb .current").text() + '_' + str(self.scan_pages_number)  # 先初始化文件名
+                self.save_file_name = doc(".breadcrumb .current").text() + '_' + str(page_index)  # 先初始化文件名
                 contents: List[PyQuery] = doc(".feed-row-wide").items()
                 # 用于后期遍历追加index下标防止每次都只写第一页数组
                 for content in contents:
@@ -46,11 +46,14 @@ class Spider:
                     except Exception as e:
                         print("异常错误信息：{}".format(e))
                         print("价格获取错误，错误内容:{}".format(product.__dict__))
-            sleep(2)
+                sleep(2)
+            else:
+                print("已经到达最后一页，共有页数:{}".format(page_index - 1))
+                break
 
 
 if __name__ == '__main__':
-    spider = Spider('https://www.smzdm.com/fenlei/naiping/h1c1s0f0t0p', 111)
+    spider = Spider('https://www.smzdm.com/fenlei/canbiangui/h1c1s0f0t0p', 165)
     spider.get_products()
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
