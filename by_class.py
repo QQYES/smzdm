@@ -1,5 +1,7 @@
 import pickle
+import random
 import re
+
 from time import sleep
 from typing import List
 
@@ -22,7 +24,7 @@ class Spider:
 
     def get_products(self):
         for page_index in tqdm(range(1, self.scan_pages_number + 1)):
-            html = request('GET', self.base_url + str(page_index), headers=self.request_headers).text
+            html = request('GET', self.base_url + str(page_index), headers=self.request_headers, verify=False).text
             if html is not None and html != '' and not html.__contains__("很抱歉，没有符合条件的结果"):
                 # 初始化PyQuery
                 doc: PyQuery = PyQuery(html)
@@ -46,14 +48,14 @@ class Spider:
                     except Exception as e:
                         print("异常错误信息：{}".format(e))
                         print("价格获取错误，错误内容:{}".format(product.__dict__))
-                sleep(2)
+                sleep(2 + random.random())
             else:
                 print("已经到达最后一页，共有页数:{}".format(page_index - 1))
                 break
 
 
 if __name__ == '__main__':
-    spider = Spider('https://www.smzdm.com/fenlei/lanyatonghuaerji/h1c1s0f0t0p', 165)
+    spider = Spider('https://www.smzdm.com/fenlei/naifen/h1c1s0f0t0p', 165)
     spider.get_products()
     spider.products.sort(key=lambda x: x.comment_count, reverse=True)
     for product_cls in spider.products:
